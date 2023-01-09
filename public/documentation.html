@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Best360ies - API</title>
+  </head>
+  <body>
+    <h1>Best360ies - API</h1>
+
+    <hr />
+
+    <!-- ======== -->
+    <!-- Welcome! -->
+    <!-- ======== -->
+
+    <h2>Welcome!</h2>
+
+    <p>
+      This is a <b>RESTful API</b> where users can interact with a collection of
+      <b>panoranic photos (ie. 360 photos)</b>.
+    </p>
+    <p>
+      For each 360 photo included in the database, data returned by the API
+      include:
+    </p>
+
+    <ul>
+      <li>Id</li>
+      <li>Url</li>
+      <li>Google panoID</li>
+      <li>Latitude</li>
+      <li>Longitude</li>
+      <li>Heading</li>
+      <li>Pitch</li>
+      <li>Country</li>
+      <li>Area name (ie. either region, city etc...)</li>
+      <li>UserId of the user who added the 360 photo to the collection</li>
+      <li>Url of the Static version of the 360 photo</li>
+    </ul>
+
+    <br />
+    <hr />
+
+    <!-- =============== -->
+    <!-- App description -->
+    <!-- =============== -->
+
+    <h2>App description</h2>
+    <p>This App main features include:</p>
+    <ul>
+      <li>Returns <b>a list of all 360 photos</b> to the user</li>
+      <li>
+        Returns <b>data</b> (id, url, panoID (ie. Google Pano ID), latitude,
+        longitude, heading, pitch, country, areaName, addedByUserId,
+        staticImgUrl) about a <b>single 360 photo</b> by 360 photo Id to the
+        user
+      </li>
+      <li>
+        Returns <b>a list of 360 photos</b> located in a specific
+        <b>location</b> (by area name) to the user
+      </li>
+      <li>
+        Returns <b>a list of 360 photos</b> added by a specific <b>user</b> (by
+        userId) to the user
+      </li>
+      <li>Allows new users to <b>register</b></li>
+      <li>
+        Allows users to <b>update</b> their user info (username, password,
+        email, date of birth)
+      </li>
+      <li>
+        Allows users to <b>add a 360 photo</b> to
+        <b>global collection of 360 photos</b>
+      </li>
+      <li>
+        Allows users to <b>add a 360 photo</b> to their list of <b>favorites</b>
+      </li>
+      <li>
+        Allows users to <b>remove a 360 photo</b> from their list of
+        <b>favorites</b>
+      </li>
+      <li>Allows existing users to <b>deregister</b></li>
+    </ul>
+
+    <br />
+
+    <hr />
+
+    <!-- =========================== -->
+    <!-- API endpoints documentation -->
+    <!-- =========================== -->
+
+    <h2>API endpoints documentation</h2>
+    <table>
+      <tr>
+        <th>Request description</th>
+        <th>Endpoint URL and query parameters</th>
+        <th>HTTP Method</th>
+        <th>Request body data format</th>
+        <th>Response body data format</th>
+      </tr>
+
+      <tr>
+        <td>Read / Get a list of Panos (panoramic photos)</td>
+        <td>/panos</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A list of JSON objects holding data about all the Panoramic photos in
+          the database
+        </td>
+      </tr>
+
+      <tr>
+        <td>Read / Get data about a single Pano by pano Id</td>
+        <td>/panos/<b>panoId</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A JSON object holding data about a single panoramic photo, containing
+          a panoId, panoUrl, googlePanoId, latitude, longitude, heading, pitch,
+          country, areaName, addedByUserId, staticImgUrl.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Create / Add a Pano to the global collection</td>
+        <td>/panos/<b>[panoId]</b>/users/<b>[userId]</b></td>
+        <td>POST</td>
+        <td>
+          A JSON object holding data about a single panoramic photo, containing
+          a panoId, panoUrl, googlePanoId, latitude, longitude, heading, pitch,
+          country, areaName, addedByUserId, staticImgUrl.
+        </td>
+        <td>
+          A JSON object holding data about a single panoramic photo, containing
+          a panoId, panoUrl, googlePanoId, latitude, longitude, heading, pitch,
+          country, areaName, addedByUserId, staticImgUrl.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Delete a Pano</td>
+        <td>/panos/<b>[panoId]</b>/users/<b>[userId]</b></td>
+        <td>DELETE</td>
+        <td>None</td>
+        <td>
+          A text message indicating whether the Pano was successfully removed.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Read / Get a list of users</td>
+        <td>/users</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A list of JSON objects holding data about all the Users registered in
+          the database.
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Read / Get data about a specific User (Allow user to see their info)
+        </td>
+        <td>/users/<b>[userId]</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A JSON object holding data about a single User, containing an _id,
+          username, password, email, birthday, addedPanos, favoritePanos, role,
+          panosMax.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Create / Add a new user (Allow new user to register)</td>
+        <td>/users</td>
+        <td>POST</td>
+        <td>A JSON object holding data about the User to add.</td>
+        <td>A JSON object holding data about the User that was added.</td>
+      </tr>
+
+      <tr>
+        <td>Update a user's data (Allow user to update their info)</td>
+        <td>/users/<b>[userId]</b></td>
+        <td>PUT</td>
+        <td>A JSON object holding data about the User data to update.</td>
+        <td>A JSON object holding data about the User that was updated.</td>
+      </tr>
+
+      <tr>
+        <td>Create / Add a Pano to a user's list of favorites by Id</td>
+        <td>/users/<b>[userId]</b>/panos/<b>[panoId]</b></td>
+        <td>POST</td>
+        <td>None</td>
+        <td>
+          A text message indicating whether the Pano was successfully added to
+          the User's favorite Panos list.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Delete / Remove a Pano from a user's list of favorites by Id</td>
+        <td>/users/<b>[userId]</b>/panos/<b>[panoId]</b></td>
+        <td>DELETE</td>
+        <td>None</td>
+        <td>
+          A text message indicating whether the Pano was successfully removed
+          from the User's favorite Panos list.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Delete a user by Id (Allow user to deregister)</td>
+        <td>/users/<b>[userId]</b></td>
+        <td>DELETE</td>
+        <td>None</td>
+        <td>
+          A text message indicating whether the User was successfully removed.
+        </td>
+      </tr>
+
+      <tr>
+        <td>Read / Get a list of panos added by a specific user</td>
+        <td>/panos/users/<b>[userId]</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A list of JSON objects holding data about the Panoramic photos in the
+          database added by a specific User.
+        </td>
+      </tr>
+    </table>
+
+    <br />
+
+    <hr />
+
+    <!-- ================================== -->
+    <!-- Technologies used and dependencies -->
+    <!-- ================================== -->
+
+    <h2>Technologies used and main dependencies</h2>
+    <ul>
+      <li>Node.js</li>
+      <li>Express</li>
+    </ul>
+
+    <br />
+
+    <hr />
+  </body>
+</html>
