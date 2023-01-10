@@ -517,12 +517,6 @@ app.put(
 //   res.status(500).send("Something broke!");
 // });
 
-// Used when App is running locally
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
-
-// Used when App is running on Heroku
-// app.listen(port, '0.0.0.0',() => {
-//   console.log('Listening on Port ' + port);
-//  });
