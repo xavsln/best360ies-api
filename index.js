@@ -13,6 +13,7 @@ app.use(cors());
 const passport = require("passport");
 require("./passport");
 
+require("dotenv").config();
 const mongoose = require("mongoose");
 const Models = require("./models.js");
 
@@ -23,7 +24,13 @@ const Users = Models.User;
 const { check, validationResult } = require("express-validator");
 
 // Connect to local mongodb (use shell and run mongosh)
-mongoose.connect("mongodb://localhost:27017/Best360iesDB", {
+// mongoose.connect("mongodb://localhost:27017/Best360iesDB", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+// Connect to mongodb Atlas
+mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -47,13 +54,14 @@ app.get("/", (req, res) => {
 // ----------------------------------------------------------------------
 // READ - Returns a list of all Panoramic photos of the global collection
 // ----------------------------------------------------------------------
+// . This route will return a list of all Panoramic photos of the global collection.
+// . User needs to be logged in to acces the list.
+// . The list is composed of JSON Objects
+
 app.get(
   "/panos",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    // res.send(
-    //   "This route will return a list of all Panoramic photos of the global collection."
-    // );
     Panos.find()
       .then((panos) => {
         res.status(201).json(panos);
@@ -68,9 +76,10 @@ app.get(
 // ------------------------------------------------------------------------
 // READ - Returns data in JSON format of specific Panoramic photo by panoId
 // ------------------------------------------------------------------------
+
 app.get(
   "/panos/:panoId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Panos.findOne({ _id: req.params.panoId })
       .then((pano) => {
@@ -84,9 +93,6 @@ app.get(
         console.error(err);
         res.status(500).send("Error: " + err);
       });
-    // res.send(
-    //   `This route will return data about a specific Panoramic photo in JSON format. In this case, data was requested for the Pano with the panoId of ${req.params.panoId}.`
-    // );
   }
 );
 
@@ -95,7 +101,7 @@ app.get(
 // --------------------------------------------------------------------------------------------------
 app.get(
   "/panos/users/:userId",
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Panos.find({ addedByUserId: req.params.userId })
       .then((pano) => {
@@ -109,9 +115,6 @@ app.get(
         console.error(err);
         res.status(500).send("Error: " + err);
       });
-    // res.send(
-    //   `This route will return a list of all Panoramic photos of the collection added by a specific User.  In this case the Panos added by the user with the userId of ${req.params.userId}.`
-    // );
   }
 );
 
@@ -124,7 +127,7 @@ app.get(
  */
 app.get(
   "/users",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     let token = req.headers.authorization;
     let decodedToken = jwt_decode(token);
@@ -145,19 +148,6 @@ app.get(
     } else {
       res.status(401).send("Not authorized.");
     }
-    // Users.find()
-    //   .then((users) => {
-    //     if (!users) {
-    //       res.status(404).send("No User in the database.");
-    //     } else {
-    //       res.status(200).json(users);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     res.status(500).send("Error: " + err);
-    //   });
-    // res.send("This route will return a list of ALL registered users.");
   }
 );
 
@@ -170,7 +160,7 @@ app.get(
  */
 app.get(
   "/users/:userId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Users.findOne({ _id: req.params.userId })
       .then((user) => {
@@ -180,9 +170,6 @@ app.get(
         console.error(err);
         res.status(500).send("Error: " + err);
       });
-    // res.send(
-    //   `This route will return data about a specific user in JSON format. In this case, data was requested for the user with the userId of ${req.params.userId}.`
-    // );
   }
 );
 
@@ -199,7 +186,7 @@ app.get(
  */
 app.post(
   "/panos/users/:userId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     // Check the number of panos already added by the user with the userId
 
@@ -214,7 +201,7 @@ app.post(
         // If the number of added Panos is below the allowed max number, the user is authorized to proceed. Otherwise there will be a message.
         if (user.addedPanos.length < user.panoMax) {
           console.log(
-            "Ok, you Pano can be added as the max number of Panos allowed is not reached."
+            "Ok, Pano can be added as the max number of Panos allowed is not reached."
           );
           Panos.findOne({ googlePanoId: req.body.googlePanoId }).then(
             (pano) => {
@@ -349,7 +336,7 @@ app.post(
  */
 app.post(
   "/users/:userId/panos/:panoId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { _id: req.params.userId },
@@ -366,9 +353,6 @@ app.post(
         }
       }
     );
-    // res.send(
-    //   `This route will add a selected Panoramic Photo data to the User list of favorite Panoramic photos in JSON format. In this case, the Panoramic Photo with the panoId ${req.params.panoId} was requested to be added to the list of favorites of user with the userId of ${req.params.userId}.`
-    // );
   }
 );
 
@@ -385,7 +369,7 @@ app.post(
  */
 app.delete(
   "/panos/:panoId/users/:userId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     // Removes from panos list
     Panos.findOneAndRemove({ _id: req.params.panoId })
@@ -427,7 +411,7 @@ app.delete(
  */
 app.delete(
   "/users/:userId/panos/:panoId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { _id: req.params.userId },
@@ -444,9 +428,6 @@ app.delete(
         }
       }
     );
-    // res.send(
-    //   `This route will delete a selected Panoramic Photo data from the User's list of favorite Panoramic photos. In this case, the Panoramic Photo with the panoId ${req.params.panoId} was requested to be deleted from the list of favorites of user with the userId of ${req.params.userId}.`
-    // );
   }
 );
 
@@ -458,7 +439,7 @@ app.delete(
  */
 app.delete(
   "/users/:userId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Users.findOneAndRemove({ _id: req.params.userId })
       .then((user) => {
@@ -472,9 +453,6 @@ app.delete(
         console.error(err);
         res.status(500).send("Error: " + err);
       });
-    // res.send(
-    //   `This route will delete a selected User from the list of User's. In this case, the User with the userId of ${req.params.userId} will be deleted.`
-    // );
   }
 );
 
@@ -489,7 +467,7 @@ app.delete(
  */
 app.put(
   "/users/:userId",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   [
     check(
       "username",
@@ -531,9 +509,6 @@ app.put(
         }
       }
     );
-    // res.send(
-    //   `This route will update a selected User's data. In this case, the User's data of the User with a userId of ${req.params.userId} will be updated.`
-    // );
   }
 );
 
