@@ -118,6 +118,28 @@ app.get(
   }
 );
 
+// ------------------------------------------------------------------------------------------------------
+// READ - Returns a list of all Panoramic photos of the collection corresponding to a specific Experience
+// ------------------------------------------------------------------------------------------------------
+app.get(
+  "/experiences/:experienceName",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Panos.find({ experiences: req.params.experienceName })
+      .then((pano) => {
+        if (pano) {
+          res.status(200).json(pano);
+        } else {
+          res.status(400).send("No such an experience in the database.");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
+
 // -----------------------------------------------------------
 // READ - Return a list (JSON Objects) of ALL registered users
 // -----------------------------------------------------------
@@ -221,6 +243,8 @@ app.post(
                   areaName: req.body.areaName,
                   addedByUserId: req.params.userId,
                   staticImgUrl: req.body.staticImgUrl,
+                  experiences: req.body.experiences,
+                  title: req.body.title,
                 })
                   .then((pano) => {
                     // console.log(
@@ -496,6 +520,7 @@ app.put(
           password: hashedPassword,
           email: req.body.email,
           birthday: req.body.birthday,
+          panoMax: req.body.panoMax,
         },
       },
       { new: true }, // This line makes sure that the updated document is returned
