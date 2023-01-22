@@ -37,6 +37,9 @@
       <li>Area name (ie. either region, city etc...)</li>
       <li>UserId of the user who added the 360 photo to the collection</li>
       <li>Url of the Static version of the 360 photo</li>
+      <li>Experiences associated with the 360 photo</li>
+      <li>Public or not status</li>
+      <li>createdAt and updatedAt</li>
     </ul>
 
     <br />
@@ -64,14 +67,15 @@
         Returns <b>a list of 360 photos</b> added by a specific <b>user</b> (by
         userId) to the user
       </li>
+      <li>
+        Returns <b>a list of 360 photos</b> associated with a specific
+        <b>experience</b> (eg. "iconic landmarks", "great museums", ...) to the
+        user
+      </li>
       <li>Allows new users to <b>register</b></li>
       <li>
         Allows users to <b>update</b> their user info (username, password,
         email, date of birth)
-      </li>
-      <li>
-        Allows users to <b>add a 360 photo</b> to
-        <b>global collection of 360 photos</b>
       </li>
       <li>
         Allows users to <b>add a 360 photo</b> to their list of <b>favorites</b>
@@ -121,6 +125,20 @@
           A JSON object holding data about a single panoramic photo, containing
           a panoId, panoUrl, googlePanoId, latitude, longitude, heading, pitch,
           country, areaName, addedByUserId, staticImgUrl.
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Read / Get data about a list of Panos corresponding to a specific
+          experience
+        </td>
+        <td>/panos/experiences/<b>experienceName</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A list of JSON objects holding data about all the Panoramic photos in
+          the database corresponding to the entered experienceName.
         </td>
       </tr>
 
