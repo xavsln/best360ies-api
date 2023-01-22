@@ -15,6 +15,10 @@ For each 360 photo included in the database, data returned by the API include:
 - Area name (ie. either region, city etc...)
 - UserId of the user who added the 360 photo to the collection
 - Url of the Static version of the 360 photo
+- experiences
+- public
+- createdAt
+- updatedAt
 
 <br>
 
@@ -26,9 +30,9 @@ This App main features include:
 - Returns **data** (id, url, panoID (ie. Google Pano ID), latitude, longitude, heading, pitch, country, areaName, addedBy, staticImgUrl) about a **single 360 photo** by 360 photo Id to the user
 - Returns **a list of 360 photos** located in a specific **location** (by area name) to the user
 - Returns **a list of 360 photos** added by a specific **user** (by userId) to the user
+- Returns **a list of 360 photos** corresponding to a specific **experience** (eg. "iconic landmarks", "great museums", ...) to the user
 - Allows new users to **register**
 - Allows users to **update** their user info (username, password, email, date of birth)
-- Allows users to add **a 360 photo** to global collection of 360 photos
 - Allows users to add **a 360 photo** to their list of favorites
 - Allows users to remove **a 360 photo** from their list of favorites
 - Allows existing users to **deregister**
